@@ -43,7 +43,7 @@ button {
 }
 .ready-button {
   color: black;
-  background-color: #fff;
+  background-color: white;
 }
 .large {
   width: 150px;

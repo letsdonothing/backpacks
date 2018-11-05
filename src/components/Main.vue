@@ -31,6 +31,8 @@
 import ImageBlock from './ImageBlock'
 import TransparentButton from './TransparentButton'
 
+/* eslint-disable */
+
 export default {
   name: 'Main',
   data () {
@@ -57,25 +59,30 @@ export default {
   mounted() {
     let self = this;
 
-    window.onscroll = function() {
+    window.onscroll = () => {
       self.scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     }
   },
   methods: {
-    animateScrollBy(y) {
-      let self = this
-      let scrolled = 0;
-      let step = Math.ceil(y / self.height) * 10;
+    animateScrollBy(n) {
+      let scrolled = n > 0 ? this.scrollTop : 0;
+      let step = n / Math.abs(n);
+      const stepMax = Math.ceil(n / this.height) * 10;
+      const x2max = Math.floor(Math.pow(n / 2, 2));
+      const div = x2max / stepMax;
+      const self = this;
 
       let timer = setInterval(() => {
-        if (scrolled >= Math.abs(y)) clearInterval(timer);
-        if (Math.abs(y) - scrolled <= 30) step /= Math.abs(step);
+        if (scrolled >= Math.abs(n)) {
+          clearInterval(timer);
+        }
         window.scrollBy(0, step);
         scrolled += Math.abs(step);
-      }, 1)
-    },
-    scroll() {
 
+        let x = scrolled - Math.abs(n) / 2;
+        let x2 = Math.floor(Math.pow(x, 2));
+        step = stepMax - (n > 0 ? Math.floor(x2 / div) : Math.ceil(x2 / div));
+      }, 5);
     }
   },
   components: {
@@ -95,18 +102,20 @@ export default {
   position: absolute;
   font-size: 30pt;
   color: #fff;
-  right: 0;
+  left: 0;
   top: 0;
   padding: 10px 25px;
 }
 .links {
   z-index: 2;
   position: absolute;
+  top: 5px;
+  right: 0;
   padding: 10px 25px;
 }
 .scroll-back {
   z-index: 2;
-  left: 50px;
+  right: 50px;
   bottom: 50px;
   position: fixed;
 }
